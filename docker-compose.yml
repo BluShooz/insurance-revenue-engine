@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: insurance-engine-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: insurance_user
+      POSTGRES_PASSWORD: insurance_pass
+      POSTGRES_DB: insurance_engine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U insurance_user -d insurance_engine"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    driver: local

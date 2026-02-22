@@ -1,0 +1,47 @@
+{
+  "name": "insurance-revenue-engine",
+  "version": "1.0.0",
+  "description": "Single-agent revenue engine for life and health insurance agents",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/cli/index.js",
+    "dev": "ts-node src/cli/index.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "ts-node prisma/seed.ts",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset --force",
+    "db:setup": "npm run db:migrate && npm run db:seed",
+    "test": "npm run db:seed && node dist/cli/index.js lead:list"
+  },
+  "bin": {
+    "insurance-engine": "./dist/cli/index.js"
+  },
+  "keywords": [
+    "insurance",
+    "crm",
+    "lead-management",
+    "commissions",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^5.7.0",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "table": "^6.8.1",
+    "date-fns": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "prisma": "^5.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

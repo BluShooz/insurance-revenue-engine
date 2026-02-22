@@ -1,0 +1,331 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// AGENT MODEL
+// ============================================================================
+// The core entity representing an insurance agent.
+// Single-agent mode: agentId = 1
+// Future SaaS mode: Multi-tenant with agent isolation
+// ============================================================================
+model Agent {
+  id          String      @id @default(cuid())
+  name        String
+  email       String?     @unique
+  phone       String?
+  licenseNumber String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relationships
+  leads       Lead[]
+  policies    Policy[]
+  activities  Activity[]
+  commissions Commission[]
+  campaigns   Campaign[]
+
+  @@map("agents")
+}
+
+// ============================================================================
+// LEAD MODEL
+// ============================================================================
+// Represents a prospective client. Supports lead scoring and intent tracking.
+// Status flow: new -> contacted -> qualified -> proposal -> closed -> lost
+// ============================================================================
+model Lead {
+  id            String      @id @default(cuid())
+  agentId       String
+  firstName     String
+  lastName      String
+  phone         String
+  email         String?
+  status        LeadStatus  @default(NEW)
+  intentLevel   IntentLevel @default(UNKNOWN)
+  score         Int         @default(0) // Dynamic lead score (0-100)
+  source        String?     // Website, referral, cold call, etc.
+  notes         String?     @db.Text
+  dateOfBirth   DateTime?
+  address       String?
+  city          String?
+  state         String?
+  zipCode       String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relationships
+  agent         Agent        @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  activities    Activity[]
+  policies      Policy[]
+
+  @@index([agentId, status])
+  @@index([agentId, score])
+  @@index([agentId, createdAt])
+  @@map("leads")
+}
+
+enum LeadStatus {
+  NEW           // Initial state, just added
+  CONTACTED     // Agent has made first contact
+  ENGAGED       // Lead is responsive, in conversation
+  QUALIFIED     // Lead meets criteria, moving forward
+  PROPOSAL      // Proposal presented
+  APPLICATION   // Application in progress
+  UNDERWRITING  // In underwriting review
+  PLACED        // Policy placed (converted)
+  NOT_PLACED    // Declined or not placed
+  NOT_INTERESTED // Lead explicitly declined
+  UNRESPONSIVE  // No response after multiple attempts
+  LOST          // Lost to competitor or other reason
+}
+
+enum IntentLevel {
+  UNKNOWN       // Initial state, intent not assessed
+  HOT           // High urgency, ready to buy (1-7 days)
+  WARM          // Moderate interest, exploring (1-30 days)
+  COLD          // Low urgency, information gathering (30+ days)
+  NONE          // No intent, not qualified
+}
+
+// ============================================================================
+// POLICY MODEL
+// ============================================================================
+// Represents an issued insurance policy.
+// Links to lead for conversion tracking.
+// Supports both life and health insurance products.
+// ============================================================================
+model Policy {
+  id              String        @id @default(cuid())
+  agentId         String
+  leadId          String        // The lead that converted to this policy
+  carrier         String        // Insurance carrier name
+  productType     ProductType   // Type of insurance product
+  faceAmount      Decimal       @db.Decimal(12, 2) // Coverage amount (for life)
+  premium         Decimal       @db.Decimal(10, 2) // Annual/monthly premium
+  commissionRate  Decimal       @db.Decimal(5, 2)  // Commission percentage
+  commissionAmount Decimal      @db.Decimal(10, 2) // Calculated commission
+  status          PolicyStatus  @default(APPLIED)
+  issueDate       DateTime?     // When policy was issued
+  effectiveDate   DateTime?     // Policy effective date
+  term            Int?          // Policy term in years (for term life)
+  policyNumber    String?       @unique // Carrier policy number
+  mode            PremiumMode   @default(MONTHLY) // Premium payment frequency
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  // Relationships
+  agent           Agent         @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  lead            Lead          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  commissions     Commission[]
+
+  @@index([agentId, status])
+  @@index([leadId])
+  @@index([agentId, issueDate])
+  @@map("policies")
+}
+
+enum ProductType {
+  TERM_LIFE           // Term life insurance
+  WHOLE_LIFE          // Whole life insurance
+  UNIVERSAL_LIFE      // Universal life insurance
+  FINAL_EXPENSE       // Final expense / burial insurance
+  IUL                 // Indexed universal life
+  HEALTH_ACA          // ACA / Obamacare plan
+  HEALTH_SHORT_TERM   // Short-term health insurance
+  MEDICARE_SUPPLEMENT // Medicare supplement
+  MEDICARE_ADVANTAGE  // Medicare advantage
+  DENTAL              // Dental insurance
+  VISION              // Vision insurance
+  DISABILITY_INCOME   // Disability income insurance
+  CRITICAL_ILLNESS    // Critical illness insurance
+  LONG_TERM_CARE      // Long-term care insurance
+  ANNUITY             // Annuity products
+  OTHER               // Other products
+}
+
+enum PolicyStatus {
+  QUOTED         // Quote provided, not applied yet
+  APPLIED        // Application submitted
+  UNDERWRITING   // In underwriting
+  APPROVED       // Approved, waiting for issue
+  ISSUED         // Policy issued and active
+  PENDING_REQUIREMENTS // Awaiting requirements
+  DECLINED       // Declined by carrier
+  POSTPONED      // Postponed by carrier
+  WITHDRAWN      // Application withdrawn
+  LAPSED         // Policy lapsed
+  SURRENDERED    // Policy surrendered
+  REPLACED       // Replaced by new policy
+}
+
+enum PremiumMode {
+  MONTHLY
+  QUARTERLY
+  SEMIANNUAL
+  ANNUAL
+}
+
+// ============================================================================
+// ACTIVITY MODEL
+// ============================================================================
+// Tracks all interactions with leads.
+// Drives the lead scoring algorithm.
+// ============================================================================
+model Activity {
+  id          String        @id @default(cuid())
+  agentId     String
+  leadId      String
+  type        ActivityType
+  outcome     ActivityOutcome?
+  title       String
+  description String?       @db.Text
+  duration    Int?          // Duration in minutes
+  timestamp   DateTime      @default(now())
+
+  // Metadata for storing additional context
+  // JSON string for flexibility: {"callDuration": 300, "emailSubject": "..."}
+  metadata    String?       @db.Text
+
+  // Relationships
+  agent       Agent         @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  lead        Lead          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([leadId, timestamp])
+  @@index([agentId, timestamp])
+  @@index([type, timestamp])
+  @@map("activities")
+}
+
+enum ActivityType {
+  CALL_INBOUND      // Incoming call from lead
+  CALL_OUTBOUND     // Outbound call to lead
+  EMAIL_SENT        // Email sent to lead
+  EMAIL_RECEIVED    // Email received from lead
+  TEXT_SENT         // SMS sent to lead
+  TEXT_RECEIVED     // SMS received from lead
+  MEETING_SCHEDULED // Meeting scheduled
+  MEETING_COMPLETED // Meeting completed
+  NOTE              // General note/activity log
+  TASK_COMPLETED    // Task completed
+  PROPOSAL_SENT     // Proposal/quotation sent
+  APPLICATION_SENT  // Application submitted
+  FOLLOW_UP         // Follow-up activity
+  VOICEMAIL_LEFT    // Voicemail left
+  VOICEMAIL_RECEIVED // Voicemail received
+  APPOINTMENT_SET   // Appointment set
+  APPOINTMENT_NO_SHOW // Appointment no-show
+  REFERRAL_RECEIVED // Referral received
+  OTHER             // Other activity type
+}
+
+enum ActivityOutcome {
+  POSITIVE        // Positive response/progress
+  NEUTRAL         // Neutral outcome
+  NEGATIVE        // Negative response/objection
+  CALLBACK        // Requested callback
+  LEFT_MESSAGE    // Left message
+  NO_ANSWER       // No answer
+  INTERESTED      // Expressed interest
+  NOT_INTERESTED  // Expressed disinterest
+  SOLD            // Sale made
+  OBJECTION       // Objection raised
+  FOLLOW_UP_SET   // Follow-up scheduled
+}
+
+// ============================================================================
+// COMMISSION MODEL
+// ============================================================================
+// Tracks commissions earned on policies.
+// Supports different commission structures (first-year, renewal, bonuses).
+// ============================================================================
+model Commission {
+  id              String          @id @default(cuid())
+  policyId        String
+  agentId         String
+  amount          Decimal         @db.Decimal(10, 2)
+  type            CommissionType
+  status          CommissionStatus @default(PENDING)
+  scheduledDate   DateTime?       // When commission is scheduled to be paid
+  paidDate        DateTime?       // When commission was actually paid
+  checkNumber     String?         // Check or reference number
+  notes           String?         @db.Text
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relationships
+  policy          Policy          @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  agent           Agent           @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, status])
+  @@index([policyId])
+  @@index([scheduledDate])
+  @@map("commissions")
+}
+
+enum CommissionType {
+  FIRST_YEAR      // First-year commission
+  RENEWAL         // Renewal commission
+  BONUS           // Production bonus
+  OVERRIDE        // Override commission (for future multi-agent)
+  LEVELING        // Leveling commission
+}
+
+enum CommissionStatus {
+  PENDING         // Awaiting payment
+  SCHEDULED       // Payment scheduled
+  PAID            // Paid
+  HELD_BACK       // Held back by carrier
+  CLAWED_BACK     // Clawed back
+  VOID            // Voided
+}
+
+// ============================================================================
+// CAMPAIGN MODEL
+// ============================================================================
+// Defines automated marketing and follow-up campaigns.
+// Supports trigger conditions and actions.
+// Future: Integration with Twilio, SendGrid, etc.
+// ============================================================================
+model Campaign {
+  id                String      @id @default(cuid())
+  agentId           String
+  name              String
+  description       String?     @db.Text
+  triggerCondition  String      @db.Text // JSON string defining trigger conditions
+  actions           String      @db.Text // JSON string defining actions to execute
+  active            Boolean     @default(true)
+  runCount          Int         @default(0)
+  lastRunAt         DateTime?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  // Relationships
+  agent             Agent       @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId, active])
+  @@map("campaigns")
+}
+
+// ============================================================================
+// CONFIGURATION MODEL (Optional)
+// ============================================================================
+// Stores system-wide and agent-specific configuration.
+// ============================================================================
+model Configuration {
+  id          String      @id @default(cuid())
+  key         String      @unique
+  value       String      @db.Text
+  description String?
+  updatedAt   DateTime    @updatedAt
+
+  @@map("configurations")
+}

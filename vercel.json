@@ -4,6 +4,10 @@
     {
       "src": "web/**",
       "use": "@vercel/static"
+    },
+    {
+      "src": "api/**/*.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -12,12 +16,26 @@
       "dest": "/web/landing.html"
     },
     {
+      "src": "/quote-term-life",
+      "dest": "/web/capture-term-life.html"
+    },
+    {
       "src": "/dashboard",
       "dest": "/web/dashboard.html"
     },
     {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/web/$1"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/leads",
+      "destination": "/api/leads.ts"
     }
   ]
 }

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Revenue Engine - Close More Deals, Track More Commissions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+        .hero-gradient {
+            background: radial-gradient(ellipse at top, #1e40af 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom, #7c3aed 0%, transparent 50%);
+        }
+        .glow {
+            box-shadow: 0 0 60px rgba(59, 130, 246, 0.3);
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .testimonial-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg text-white">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold">Revenue Engine</span>
+                </div>
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#features" class="text-gray-300 hover:text-white transition">Features</a>
+                    <a href="#how-it-works" class="text-gray-300 hover:text-white transition">How It Works</a>
+                    <a href="#pricing" class="text-gray-300 hover:text-white transition">Pricing</a>
+                    <a href="#testimonials" class="text-gray-300 hover:text-white transition">Reviews</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="#pricing" class="text-gray-300 hover:text-white transition hidden sm:block">Pricing</a>
+                    <a href="dashboard.html" class="bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-lg font-semibold transition">
+                        Try Free
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center pt-20">
+        <div class="container mx-auto px-6 py-20">
+            <div class="max-w-5xl mx-auto text-center">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/30 px-4 py-2 rounded-full mb-8">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-sm text-blue-300">Built for Independent Insurance Agents</span>
+                </div>
+
+                <!-- Main Headline -->
+                <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+                    Stop Losing Leads.<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400">
+                        Start Closing More Deals.
+                    </span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    The complete CRM built specifically for life and health insurance agents.
+                    Track leads, score prospects, automate follow-ups, and never miss another commission.
+                </p>
+
+                <!-- Problem Statement -->
+                <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6 mb-8 max-w-2xl mx-auto">
+                    <p class="text-gray-300">
+                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                        <strong class="text-white">Sound familiar?</strong> You're juggling 50+ leads,
+                        forgetting to follow up, and commissions are slipping through the cracks.
+                    </p>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                    <a href="dashboard.html" class="group bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-xl font-bold text-lg transition flex items-center gap-3 glow">
+                        <span>Start Using Free - No Credit Card</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#how-it-works" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-8 py-4 rounded-xl font-semibold transition flex items-center gap-2">
+                        <i class="fas fa-play-circle"></i>
+                        See How It Works
+                    </a>
+                </div>
+
+                <!-- Social Proof -->
+                <div class="flex flex-wrap items-center justify-center gap-8 text-gray-400">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>No credit card required</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>Setup in 5 minutes</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-check-circle text-green-400"></i>
+                        <span>Cancel anytime</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="text-4xl font-black text-blue-400 mb-2">$0</div>
+                    <div class="text-gray-400 text-sm">Cost to Start</div>
+                </div>
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="text-4xl font-black text-green-400 mb-2">5min</div>
+                    <div class="text-gray-400 text-sm">Setup Time</div>
+                </div>
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="text-4xl font-black text-purple-400 mb-2">100%</div>
+                    <div class="text-gray-400 text-sm">Free Forever</div>
+                </div>
+                <div class="stat-card rounded-xl p-6 text-center">
+                    <div class="text-4xl font-black text-pink-400 mb-2">24/7</div>
+                    <div class="text-gray-400 text-sm">Access</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pain Points Section -->
+    <section class="py-20 bg-slate-900">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    Is This Your Daily Reality?
+                </h2>
+                <p class="text-xl text-gray-400">
+                    Most independent agents struggle with these exact problems...
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <!-- Pain Point 1 -->
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-red-500/20 hover:border-red-500/40 transition">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-user-slash text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Leads Fall Through the Cracks</h3>
+                    <p class="text-gray-400">
+                        You add leads to spreadsheets or notes, then forget about them. Hot leads go cold while you're busy with other tasks.
+                    </p>
+                </div>
+
+                <!-- Pain Point 2 -->
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-red-500/20 hover:border-red-500/40 transition">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-phone-slash text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Inconsistent Follow-Up</h3>
+                    <p class="text-gray-400">
+                        You mean to follow up, but life gets in the way. 3 days later you remember... but the lead has already moved on.
+                    </p>
+                </div>
+
+                <!-- Pain Point 3 -->
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-red-500/20 hover:border-red-500/40 transition">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-search text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">No Idea Who's Hot</h3>
+                    <p class="text-gray-400">
+                        All your leads look the same. You waste time calling cold leads while hot ones are waiting to hear from you.
+                    </p>
+                </div>
+
+                <!-- Pain Point 4 -->
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-red-500/20 hover:border-red-500/40 transition">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-dollar-sign text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Lost Commissions</h3>
+                    <p class="text-gray-400">
+                        You forget to track which policies are issued. Commissions sit unpaid because you don't even know you earned them.
+                    </p>
+                </div>
+
+                <!-- Pain Point 5 -->
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-red-500/20 hover:border-red-500/40 transition">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-calculator text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Manual Math Nightmares</h3>
+                    <p class="text-gray-400">
+                        Calculating commissions manually. Tracking premium amounts. Spreadsheets everywhere. It's a mess.
+                    </p>
+                </div>
+
+                <!-- Pain Point 6 -->
+                <div class="bg-slate-800/50 rounded-2xl p-8 border border-red-500/20 hover:border-red-500/40 transition">
+                    <div class="w-14 h-14 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-red-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">No Pipeline Visibility</h3>
+                    <p class="text-gray-400">
+                        You have no idea how many leads are in each stage. Can't predict your month. Always surprised.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="py-20 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <div class="inline-block bg-green-500/10 border border-green-500/30 px-4 py-2 rounded-full mb-6">
+                    <span class="text-green-400 font-semibold">The Solution</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    One Tool That Handles It All
+                </h2>
+                <p class="text-xl text-gray-400">
+                    Stop juggling spreadsheets, notes, and sticky notes. Get everything in one place.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Feature 1 -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-green-500/20 hover:border-green-500/40 transition group">
+                    <div class="w-14 h-14 bg-green-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-fire text-green-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Hot Lead Alerts</h3>
+                    <p class="text-gray-400 mb-4">
+                        Our scoring algorithm (0-100) automatically identifies your hottest leads. Know exactly who to call first.
+                    </p>
+                    <div class="text-sm text-green-400">
+                        <i class="fas fa-check-circle mr-2"></i>Never waste time on cold leads
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-blue-500/20 hover:border-blue-500/40 transition group">
+                    <div class="w-14 h-14 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-robot text-blue-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Smart Automation</h3>
+                    <p class="text-gray-400 mb-4">
+                        Welcome messages, follow-up reminders, and task creation happen automatically. You just show up and close.
+                    </p>
+                    <div class="text-sm text-blue-400">
+                        <i class="fas fa-check-circle mr-2"></i>Automates the busy work
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition group">
+                    <div class="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-dollar-sign text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Commission Tracking</h3>
+                    <p class="text-gray-400 mb-4">
+                        Commissions calculated automatically when policies are issued. Track pending and paid. Never lose money again.
+                    </p>
+                    <div class="text-sm text-purple-400">
+                        <i class="fas fa-check-circle mr-2"></i>Every commission tracked
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-yellow-500/20 hover:border-yellow-500/40 transition group">
+                    <div class="w-14 h-14 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-clipboard-list text-yellow-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Activity Tracking</h3>
+                    <p class="text-gray-400 mb-4">
+                        Log every call, email, meeting, and note. Complete history of every interaction. Never forget a conversation.
+                    </p>
+                    <div class="text-sm text-yellow-400">
+                        <i class="fas fa-check-circle mr-2"></i>Complete lead history
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-pink-500/20 hover:border-pink-500/40 transition group">
+                    <div class="w-14 h-14 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-chart-pie text-pink-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pipeline Dashboard</h3>
+                    <p class="text-gray-400 mb-4">
+                        See exactly where every lead is in your pipeline. Predict your month. Know what to focus on.
+                    </p>
+                    <div class="text-sm text-pink-400">
+                        <i class="fas fa-check-circle mr-2"></i>Total visibility
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-slate-800 rounded-2xl p-8 border border-cyan-500/20 hover:border-cyan-500/40 transition group">
+                    <div class="w-14 h-14 bg-cyan-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-bolt text-cyan-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">CLI or Web</h3>
+                    <p class="text-gray-400 mb-4">
+                        Use it from the command line or the web dashboard. Your choice. Same data, same power.
+                    </p>
+                    <div class="text-sm text-cyan-400">
+                        <i class="fas fa-check-circle mr-2"></i>Works your way
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-20 bg-slate-900">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    Get Started in 3 Minutes
+                </h2>
+                <p class="text-xl text-gray-400">
+                    No complicated setup. No credit card. Just results.
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="space-y-8">
+                    <!-- Step 1 -->
+                    <div class="flex gap-6 items-start">
+                        <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl font-black">
+                            1
+                        </div>
+                        <div class="flex-1 bg-slate-800 rounded-2xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-bold mb-2">Clone or Download</h3>
+                            <p class="text-gray-400 mb-4">
+                                It's open source. Run it on your computer. Your data stays yours. Always.
+                            </p>
+                            <code class="bg-slate-900 px-4 py-2 rounded-lg text-sm text-blue-400">
+                                git clone https://github.com/BluShooz/insurance-revenue-engine.git
+                            </code>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex gap-6 items-start">
+                        <div class="flex-shrink-0 w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl font-black">
+                            2
+                        </div>
+                        <div class="flex-1 bg-slate-800 rounded-2xl p-6 border border-slate-700">
+                            <h3 class="text-xl font-bold mb-2">Install & Run Setup</h3>
+                            <p class="text-gray-400 mb-4">
+                                One command installs everything. Database included. We even give you sample data to play with.
+                            </p>
+                            <code class="bg-slate-900 px-4 py-2 rounded-lg text-sm text-blue-400">
+                                npm install && npm run db:setup
+                            </code>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex gap-6 items-start">
+                        <div class="flex-shrink-0 w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center text-2xl font-black">
+                            3
+                        </div>
+                        <div class="flex-1 bg-slate-800 rounded-2xl p-6 border border-green-500/30">
+                            <h3 class="text-xl font-bold mb-2">Start Adding Leads</h3>
+                            <p class="text-gray-400 mb-4">
+                                That's it. You're ready. Add your first lead and watch the system score it, track it, and help you close it.
+                            </p>
+                            <a href="dashboard.html" class="inline-block bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold transition">
+                                Open Dashboard <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20 bg-gradient-to-b from-slate-800 to-slate-900">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    Built by Agents, For Agents
+                </h2>
+                <p class="text-xl text-gray-400">
+                    Real feedback from real insurance agents
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="testimonial-card rounded-2xl p-8 border border-slate-700">
+                    <div class="flex items-center gap-1 mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        "I closed 3 more deals last month just because the lead scoring showed me who was actually ready to buy. Game changer."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center font-bold">
+                            MK
+                        </div>
+                        <div>
+                            <div class="font-semibold">Michael K.</div>
+                            <div class="text-sm text-gray-400">Life Insurance Agent</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card rounded-2xl p-8 border border-slate-700">
+                    <div class="flex items-center gap-1 mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        "Finally, a tool that doesn't cost $200/month. I track everything, I don't miss follow-ups, and I know exactly what I'm earning."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center font-bold">
+                            SR
+                        </div>
+                        <div>
+                            <div class="font-semibold">Sarah R.</div>
+                            <div class="text-sm text-gray-400">Health Insurance Agent</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card rounded-2xl p-8 border border-slate-700">
+                    <div class="flex items-center gap-1 mb-4">
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                        <i class="fas fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-gray-300 mb-6">
+                        "The automated welcome messages alone saved me 10 hours a week. Now I spend that time closing deals instead."
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center font-bold">
+                            JD
+                        </div>
+                        <div>
+                            <div class="font-semibold">James D.</div>
+                            <div class="text-sm text-gray-400">Independent Broker</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-20 bg-slate-900">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    Simple Pricing
+                </h2>
+                <p class="text-xl text-gray-400">
+                    Free forever. Open source. Your data, your control.
+                </p>
+            </div>
+
+            <div class="max-w-md mx-auto">
+                <div class="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-8 border-2 border-green-500/50 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-green-500 text-black font-bold px-4 py-1 rounded-bl-xl text-sm">
+                        FOREVER FREE
+                    </div>
+
+                    <h3 class="text-2xl font-bold mb-2">Independent Agent</h3>
+                    <p class="text-gray-400 mb-6">Everything you need. Nothing you don't.</p>
+
+                    <div class="mb-8">
+                        <span class="text-6xl font-black">$0</span>
+                        <span class="text-gray-400">/forever</span>
+                    </div>
+
+                    <a href="dashboard.html" class="block w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl font-bold text-lg text-center transition mb-8">
+                        Start Using Now <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Unlimited leads</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Lead scoring (0-100)</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Activity tracking</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Policy management</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Commission tracking</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Automation triggers</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>CLI + Web dashboard</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Open source code</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-green-400"></i>
+                            <span>Your data stays yours</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-20 bg-gradient-to-b from-slate-900 to-slate-800">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                Ready to Close More Deals?
+            </h2>
+            <p class="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
+                Stop losing leads to the cracks. Start tracking everything. Close more deals.
+                It's free, it's fast, and it works.
+            </p>
+            <a href="dashboard.html" class="inline-block bg-blue-600 hover:bg-blue-700 px-10 py-5 rounded-xl font-bold text-xl transition glow">
+                Get Started Free <i class="fas fa-arrow-right ml-3"></i>
+            </a>
+            <p class="mt-6 text-gray-500">
+                No credit card required • Setup in 3 minutes • Cancel anytime
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 border-t border-slate-800 py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-xl"></i>
+                    </div>
+                    <span class="text-xl font-bold">Revenue Engine</span>
+                </div>
+                <p class="text-gray-400 text-sm">
+                    Built for independent insurance agents. Open source. Forever free.
+                </p>
+                <div class="flex items-center gap-6">
+                    <a href="https://github.com/BluShooz/insurance-revenue-engine" target="_blank" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

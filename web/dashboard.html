@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Insurance Revenue Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar-item.active {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.2) 0%, transparent 100%);
+            border-left: 3px solid #3b82f6;
+        }
+        .score-hot { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+        .score-warm { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
+        .score-cold { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        .lead-row:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+        }
+        .modal.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-white">
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-0 h-full w-64 bg-slate-900 border-r border-slate-800 z-50">
+        <div class="p-6 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-shield-alt text-xl"></i>
+                </div>
+                <div>
+                    <div class="font-bold">Revenue Engine</div>
+                    <div class="text-xs text-gray-400">Agent Dashboard</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2">
+            <a href="#" onclick="showSection('dashboard')" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition" data-section="dashboard">
+                <i class="fas fa-chart-line w-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" onclick="showSection('leads')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition" data-section="leads">
+                <i class="fas fa-users w-5"></i>
+                <span>Leads</span>
+            </a>
+            <a href="#" onclick="showSection('hot-leads')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition" data-section="hot-leads">
+                <i class="fas fa-fire w-5 text-orange-400"></i>
+                <span>Hot Leads</span>
+                <span class="ml-auto bg-orange-500 text-xs px-2 py-1 rounded-full">3</span>
+            </a>
+            <a href="#" onclick="showSection('activities')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition" data-section="activities">
+                <i class="fas fa-clipboard-list w-5"></i>
+                <span>Activities</span>
+            </a>
+            <a href="#" onclick="showSection('policies')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition" data-section="policies">
+                <i class="fas fa-file-shield w-5"></i>
+                <span>Policies</span>
+            </a>
+            <a href="#" onclick="showSection('commissions')" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white hover:bg-slate-800 transition" data-section="commissions">
+                <i class="fas fa-dollar-sign w-5"></i>
+                <span>Commissions</span>
+            </a>
+        </nav>
+
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-800">
+            <div class="flex items-center gap-3 px-4 py-3 bg-slate-800 rounded-lg">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold">
+                    SM
+                </div>
+                <div class="flex-1">
+                    <div class="font-semibold text-sm">Sarah Mitchell</div>
+                    <div class="text-xs text-gray-400">Independent Agent</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-64 min-h-screen">
+        <!-- Top Bar -->
+        <header class="sticky top-0 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 z-40">
+            <div class="px-8 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold" id="page-title">Dashboard</h1>
+                    <p class="text-sm text-gray-400" id="page-subtitle">Welcome back, Sarah</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="openAddLeadModal()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Lead</span>
+                    </button>
+                    <button class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg transition">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="section-dashboard" class="p-8">
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-users text-blue-400 text-xl"></i>
+                        </div>
+                        <span class="text-green-400 text-sm font-semibold">+12%</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-1">24</div>
+                    <div class="text-gray-400 text-sm">Total Leads</div>
+                </div>
+
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-fire text-green-400 text-xl"></i>
+                        </div>
+                        <span class="text-green-400 text-sm font-semibold">+3</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-1">8</div>
+                    <div class="text-gray-400 text-sm">Hot Leads</div>
+                </div>
+
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-file-shield text-purple-400 text-xl"></i>
+                        </div>
+                        <span class="text-yellow-400 text-sm font-semibold">2 pending</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-1">6</div>
+                    <div class="text-gray-400 text-sm">Policies This Month</div>
+                </div>
+
+                <div class="stat-card rounded-xl p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-dollar-sign text-yellow-400 text-xl"></i>
+                        </div>
+                        <span class="text-green-400 text-sm font-semibold">+$2,400</span>
+                    </div>
+                    <div class="text-3xl font-bold mb-1">$8,650</div>
+                    <div class="text-gray-400 text-sm">Pending Commissions</div>
+                </div>
+            </div>
+
+            <!-- Hot Leads to Call -->
+            <div class="bg-slate-900 rounded-xl border border-slate-800 mb-8">
+                <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-xl font-bold">🔥 Hot Leads - Call Now</h2>
+                        <p class="text-sm text-gray-400">These leads scored 70+ and need immediate attention</p>
+                    </div>
+                    <a href="#" onclick="showSection('hot-leads')" class="text-blue-400 hover:text-blue-300 text-sm font-semibold">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="divide-y divide-slate-800">
+                    <div class="p-6 flex items-center justify-between hover:bg-slate-800/50 transition">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center font-bold">
+                                EC
+                            </div>
+                            <div>
+                                <div class="font-semibold">Emily Chen</div>
+                                <div class="text-sm text-gray-400">555-1002 • Last contact: 2 days ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="score-hot text-white px-3 py-1 rounded-full text-sm font-bold">
+                                85
+                            </div>
+                            <button onclick="openLogActivityModal('lead-1')" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                                Log Call
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 flex items-center justify-between hover:bg-slate-800/50 transition">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-yellow-500 rounded-full flex items-center justify-center font-bold text-black">
+                                SD
+                            </div>
+                            <div>
+                                <div class="font-semibold">Sarah Davis</div>
+                                <div class="text-sm text-gray-400">555-1004 • Last contact: 1 day ago</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="score-hot text-white px-3 py-1 rounded-full text-sm font-bold">
+                                78
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                                Log Call
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 flex items-center justify-between hover:bg-slate-800/50 transition">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center font-bold">
+                                RW
+                            </div>
+                            <div>
+                                <div class="font-semibold">Robert Wilson</div>
+                                <div class="text-sm text-gray-400">555-1005 • Last contact: Today</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="score-warm text-white px-3 py-1 rounded-full text-sm font-bold">
+                                72
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                                Log Call
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Recent Activities -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800">
+                    <div class="p-6 border-b border-slate-800">
+                        <h2 class="text-xl font-bold">Recent Activities</h2>
+                    </div>
+                    <div class="p-6 space-y-4 max-h-96 overflow-y-auto">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-phone text-green-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Call with Emily Chen</div>
+                                <div class="text-sm text-gray-400">Interested in term life • 2 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-envelope text-blue-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Email sent to Michael Brown</div>
+                                <div class="text-sm text-gray-400">Final expense quote • 4 hours ago</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-handshake text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Meeting with David Taylor</div>
+                                <div class="text-sm text-gray-400">Discussed whole life options • Yesterday</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-file-alt text-yellow-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-semibold">Application submitted</div>
+                                <div class="text-sm text-gray-400">Sarah Davis - IUL policy • 2 days ago</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pipeline Overview -->
+                <div class="bg-slate-900 rounded-xl border border-slate-800">
+                    <div class="p-6 border-b border-slate-800">
+                        <h2 class="text-xl font-bold">Pipeline Overview</h2>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">New Leads</span>
+                                <span class="text-sm font-semibold">4</span>
+                            </div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gray-500" style="width: 16%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Contacted</span>
+                                <span class="text-sm font-semibold">3</span>
+                            </div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500" style="width: 12%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Qualified</span>
+                                <span class="text-sm font-semibold">5</span>
+                            </div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-yellow-500" style="width: 20%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Proposal/Application</span>
+                                <span class="text-sm font-semibold">6</span>
+                            </div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-orange-500" style="width: 25%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Underwriting</span>
+                                <span class="text-sm font-semibold">2</span>
+                            </div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-purple-500" style="width: 8%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-sm">Placed</span>
+                                <span class="text-sm font-semibold">4</span>
+                            </div>
+                            <div class="h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500" style="width: 16%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leads Section -->
+        <section id="section-leads" class="p-8 hidden">
+            <div class="bg-slate-900 rounded-xl border border-slate-800">
+                <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                    <h2 class="text-xl font-bold">All Leads</h2>
+                    <div class="flex items-center gap-4">
+                        <input type="text" placeholder="Search leads..." class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
+                        <select class="bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-blue-500">
+                            <option>All Statuses</option>
+                            <option>New</option>
+                            <option>Qualified</option>
+                            <option>Proposal</option>
+                            <option>Application</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-800">
+                            <tr>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Name</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Score</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Status</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Intent</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Activities</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Last Contact</th>
+                                <th class="text-right px-6 py-4 text-sm font-semibold text-gray-400">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="lead-row">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center font-bold text-sm">
+                                            EC
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold">Emily Chen</div>
+                                            <div class="text-sm text-gray-400">emily.chen@email.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="score-hot text-white px-3 py-1 rounded-full text-sm font-bold">85</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">Qualified</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-orange-400">🔥 Hot</span>
+                                </td>
+                                <td class="px-6 py-4">7</td>
+                                <td class="px-6 py-4 text-gray-400">2 days ago</td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="text-blue-400 hover:text-blue-300 mr-3"><i class="fas fa-phone"></i></button>
+                                    <button class="text-gray-400 hover:text-white"><i class="fas fa-ellipsis-v"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="lead-row">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold text-sm">
+                                            JA
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold">John Anderson</div>
+                                            <div class="text-sm text-gray-400">john.anderson@email.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="score-warm text-white px-3 py-1 rounded-full text-sm font-bold">45</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">New</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-yellow-400">🌡️ Warm</span>
+                                </td>
+                                <td class="px-6 py-4">2</td>
+                                <td class="px-6 py-4 text-gray-400">5 days ago</td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="text-blue-400 hover:text-blue-300 mr-3"><i class="fas fa-phone"></i></button>
+                                    <button class="text-gray-400 hover:text-white"><i class="fas fa-ellipsis-v"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="lead-row">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center font-bold text-sm">
+                                            MB
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold">Michael Brown</div>
+                                            <div class="text-sm text-gray-400">michael.brown@email.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="score-cold text-white px-3 py-1 rounded-full text-sm font-bold">55</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm">Proposal</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="text-yellow-400">🌡️ Warm</span>
+                                </td>
+                                <td class="px-6 py-4">4</td>
+                                <td class="px-6 py-4 text-gray-400">1 week ago</td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="text-blue-400 hover:text-blue-300 mr-3"><i class="fas fa-phone"></i></button>
+                                    <button class="text-gray-400 hover:text-white"><i class="fas fa-ellipsis-v"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hot Leads Section -->
+        <section id="section-hot-leads" class="p-8 hidden">
+            <div class="bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-xl border border-orange-500/30 p-6 mb-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-fire text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold">🔥 Hot Leads Alert</h2>
+                        <p class="text-gray-400">These leads have a score of 70+ and need your immediate attention. Call them first!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid gap-6">
+                <!-- Hot Lead Card -->
+                <div class="bg-slate-900 rounded-xl border-2 border-green-500/50 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 bg-green-500 rounded-full flex items-center justify-center font-bold text-xl">
+                                EC
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">Emily Chen</h3>
+                                <p class="text-gray-400">555-1002 • emily.chen@email.com</p>
+                            </div>
+                        </div>
+                        <div class="score-hot text-white px-6 py-3 rounded-full text-2xl font-bold">
+                            85
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-4 mb-4">
+                        <div class="bg-slate-800 rounded-lg p-3 text-center">
+                            <div class="text-sm text-gray-400">Status</div>
+                            <div class="font-semibold">Qualified</div>
+                        </div>
+                        <div class="bg-slate-800 rounded-lg p-3 text-center">
+                            <div class="text-sm text-gray-400">Intent</div>
+                            <div class="font-semibold text-orange-400">🔥 Hot</div>
+                        </div>
+                        <div class="bg-slate-800 rounded-lg p-3 text-center">
+                            <div class="text-sm text-gray-400">Activities</div>
+                            <div class="font-semibold">7 logged</div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-3 mb-4">
+                        <div class="text-sm text-gray-400 mb-1">Notes</div>
+                        <p class="text-sm">Referred by existing client, needs $500k term policy. Very interested, ready to move forward.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-lg font-semibold transition">
+                            <i class="fas fa-phone mr-2"></i> Call Now
+                        </button>
+                        <button class="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition">
+                            <i class="fas fa-envelope mr-2"></i> Send Email
+                        </button>
+                        <button class="bg-slate-700 hover:bg-slate-600 px-4 py-3 rounded-lg transition">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- More hot leads would go here -->
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section id="section-activities" class="p-8 hidden">
+            <div class="bg-slate-900 rounded-xl border border-slate-800">
+                <div class="p-6 border-b border-slate-800">
+                    <h2 class="text-xl font-bold">Activity Log</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-phone text-green-400"></i>
+                                </div>
+                                <div class="w-0.5 flex-1 bg-slate-800 mt-2"></div>
+                            </div>
+                            <div class="flex-1 pb-8">
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="font-semibold">Call with Emily Chen</div>
+                                    <div class="text-sm text-gray-400">2 hours ago</div>
+                                </div>
+                                <p class="text-gray-400 text-sm">Discussed term life options. Client very interested in $500k coverage. Follow up with quotes scheduled for tomorrow.</p>
+                                <div class="mt-2 flex gap-2">
+                                    <span class="bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs">Positive Outcome</span>
+                                    <span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs">15 min</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="flex flex-col items-center">
+                                <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-envelope text-blue-400"></i>
+                                </div>
+                                <div class="w-0.5 flex-1 bg-slate-800 mt-2"></div>
+                            </div>
+                            <div class="flex-1 pb-8">
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="font-semibold">Email sent to Michael Brown</div>
+                                    <div class="text-sm text-gray-400">4 hours ago</div>
+                                </div>
+                                <p class="text-gray-400 text-sm">Sent final expense quote comparison from 3 carriers. Client reviewing options.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-handshake text-purple-400"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-1">
+                                    <div class="font-semibold">Meeting with David Taylor</div>
+                                    <div class="text-sm text-gray-400">Yesterday</div>
+                                </div>
+                                <p class="text-gray-400 text-sm">Product presentation meeting. Discussed whole life vs term. Client leaning toward whole life for cash value.</p>
+                                <div class="mt-2 flex gap-2">
+                                    <span class="bg-purple-500/20 text-purple-400 px-2 py-1 rounded text-xs">Meeting</span>
+                                    <span class="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-xs">45 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Policies Section -->
+        <section id="section-policies" class="p-8 hidden">
+            <div class="bg-slate-900 rounded-xl border border-slate-800">
+                <div class="p-6 border-b border-slate-800">
+                    <h2 class="text-xl font-bold">Policies</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-800">
+                            <tr>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Client</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Carrier</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Product</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Face Amount</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Premium</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Status</th>
+                                <th class="text-right px-6 py-4 text-sm font-semibold text-gray-400">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="lead-row">
+                                <td class="px-6 py-4 font-semibold">Robert Wilson</td>
+                                <td class="px-6 py-4">Protective Life</td>
+                                <td class="px-6 py-4">Term Life</td>
+                                <td class="px-6 py-4">$1,000,000</td>
+                                <td class="px-6 py-4">$1,200/yr</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm">Underwriting</span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="text-blue-400 hover:text-blue-300 text-sm">View Details</button>
+                                </td>
+                            </tr>
+                            <tr class="lead-row">
+                                <td class="px-6 py-4 font-semibold">James Moore</td>
+                                <td class="px-6 py-4">Mutual of Omaha</td>
+                                <td class="px-6 py-4">Final Expense</td>
+                                <td class="px-6 py-4">$25,000</td>
+                                <td class="px-6 py-4">$180/yr</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">Issued</span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button class="text-blue-400 hover:text-blue-300 text-sm">View Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commissions Section -->
+        <section id="section-commissions" class="p-8 hidden">
+            <div class="grid lg:grid-cols-3 gap-6 mb-8">
+                <div class="stat-card rounded-xl p-6">
+                    <div class="text-sm text-gray-400 mb-2">Pending Commissions</div>
+                    <div class="text-3xl font-bold text-yellow-400">$8,650</div>
+                    <div class="text-sm text-gray-400 mt-2">4 policies</div>
+                </div>
+                <div class="stat-card rounded-xl p-6">
+                    <div class="text-sm text-gray-400 mb-2">Paid YTD</div>
+                    <div class="text-3xl font-bold text-green-400">$12,480</div>
+                    <div class="text-sm text-gray-400 mt-2">8 policies</div>
+                </div>
+                <div class="stat-card rounded-xl p-6">
+                    <div class="text-sm text-gray-400 mb-2">Total Earned</div>
+                    <div class="text-3xl font-bold text-blue-400">$21,130</div>
+                    <div class="text-sm text-gray-400 mt-2">12 policies</div>
+                </div>
+            </div>
+
+            <div class="bg-slate-900 rounded-xl border border-slate-800">
+                <div class="p-6 border-b border-slate-800">
+                    <h2 class="text-xl font-bold">Commission Details</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-slate-800">
+                            <tr>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Policy</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Client</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Carrier</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Amount</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Status</th>
+                                <th class="text-left px-6 py-4 text-sm font-semibold text-gray-400">Expected</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="lead-row">
+                                <td class="px-6 py-4 text-sm">PL-2024-001</td>
+                                <td class="px-6 py-4">Robert Wilson</td>
+                                <td class="px-6 py-4">Protective Life</td>
+                                <td class="px-6 py-4 font-semibold text-green-400">$1,080</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm">Pending</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-400">Mar 15, 2024</td>
+                            </tr>
+                            <tr class="lead-row">
+                                <td class="px-6 py-4 text-sm">MOO-2024-089</td>
+                                <td class="px-6 py-4">James Moore</td>
+                                <td class="px-6 py-4">Mutual of Omaha</td>
+                                <td class="px-6 py-4 font-semibold text-green-400">$108</td>
+                                <td class="px-6 py-4">
+                                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">Paid</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-400">Feb 5, 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add Lead Modal -->
+    <div id="add-lead-modal" class="modal items-center justify-center">
+        <div class="bg-slate-900 rounded-2xl border border-slate-800 w-full max-w-lg mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <h2 class="text-xl font-bold">Add New Lead</h2>
+                <button onclick="closeAddLeadModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">First Name *</label>
+                        <input type="text" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Last Name *</label>
+                        <input type="text" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Phone *</label>
+                    <input type="tel" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Email</label>
+                    <input type="email" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Intent Level</label>
+                        <select class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                            <option>Unknown</option>
+                            <option>Hot</option>
+                            <option>Warm</option>
+                            <option>Cold</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Source</label>
+                        <select class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                            <option>Website</option>
+                            <option>Referral</option>
+                            <option>Cold Call</option>
+                            <option>Networking</option>
+                            <option>Social Media</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Notes</label>
+                    <textarea rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeAddLeadModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-3 rounded-lg font-semibold transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition">
+                        Add Lead
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Log Activity Modal -->
+    <div id="log-activity-modal" class="modal items-center justify-center">
+        <div class="bg-slate-900 rounded-2xl border border-slate-800 w-full max-w-lg mx-4">
+            <div class="p-6 border-b border-slate-800 flex items-center justify-between">
+                <h2 class="text-xl font-bold">Log Activity</h2>
+                <button onclick="closeLogActivityModal()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Activity Type *</label>
+                    <select required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                        <option>Call Outbound</option>
+                        <option>Call Inbound</option>
+                        <option>Email Sent</option>
+                        <option>Email Received</option>
+                        <option>Meeting Scheduled</option>
+                        <option>Meeting Completed</option>
+                        <option>Text Sent</option>
+                        <option>Text Received</option>
+                        <option>Note</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Outcome</label>
+                    <select class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                        <option>Positive</option>
+                        <option>Interested</option>
+                        <option>Neutral</option>
+                        <option>Not Interested</option>
+                        <option>Left Message</option>
+                        <option>No Answer</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Notes</label>
+                    <textarea rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2">Duration (minutes)</label>
+                    <input type="number" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeLogActivityModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-3 rounded-lg font-semibold transition">
+                        Cancel
+                    </button>
+                    <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition">
+                        Log Activity
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Section Navigation
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('[id^="section-"]').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById('section-' + sectionName).classList.remove('hidden');
+
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.section === sectionName) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Update page title
+            const titles = {
+                'dashboard': 'Dashboard',
+                'leads': 'Leads',
+                'hot-leads': 'Hot Leads',
+                'activities': 'Activities',
+                'policies': 'Policies',
+                'commissions': 'Commissions'
+            };
+            document.getElementById('page-title').textContent = titles[sectionName] || 'Dashboard';
+        }
+
+        // Add Lead Modal
+        function openAddLeadModal() {
+            document.getElementById('add-lead-modal').classList.add('active');
+        }
+
+        function closeAddLeadModal() {
+            document.getElementById('add-lead-modal').classList.remove('active');
+        }
+
+        // Log Activity Modal
+        function openLogActivityModal(leadId) {
+            document.getElementById('log-activity-modal').classList.add('active');
+        }
+
+        function closeLogActivityModal() {
+            document.getElementById('log-activity-modal').classList.remove('active');
+        }
+
+        // Close modals on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Prevent form submissions for demo
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('This is a demo! In the full version, this would connect to your backend API.');
+                closeAddLeadModal();
+                closeLogActivityModal();
+            });
+        });
+    </script>
+</body>
+</html>

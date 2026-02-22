@@ -12,6 +12,7 @@ import policyCommands from './commands/policy';
 import commissionCommands from './commands/commission';
 import campaignCommands from './commands/campaign';
 import dashboardCommands from './commands/dashboard';
+import publicRecordsCommands from './commands/publicRecords';
 
 const program = new Command();
 const logger = new Logger('CLI');

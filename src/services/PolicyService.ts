@@ -210,8 +210,8 @@ export class PolicyService {
     }
 
     // If status changed to DECLINED, POSTPONED, or WITHDRAWN
-    if (['DECLINED', 'POSTPONED', 'WITHDRAWN'].includes(params.status || '')) {
-      await this.handlePolicyNotIssued(policyId, params.status!);
+    if (params.status && ['DECLINED', 'POSTPONED', 'WITHDRAWN'].includes(params.status as string)) {
+      await this.handlePolicyNotIssued(policyId, params.status as 'DECLINED' | 'POSTPONED' | 'WITHDRAWN');
     }
 
     logger.success('Policy updated');

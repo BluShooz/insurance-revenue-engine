@@ -1,6 +1,6 @@
 # Insurance Revenue Engine
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-purple?style=for-the-badge&logo=vercel)](https://insurance-revenue-engine-r4ylkjx3s-jon-smiths-projects-a3dfc292.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20Site-purple?style=for-the-badge&logo=vercel)](https://insurance-revenue-engine-ie1e098en-jon-smiths-projects-a3dfc292.vercel.app)
 
 A complete single-agent revenue engine for life and health insurance agents. Built with **Node.js / TypeScript + Prisma + PostgreSQL**.
 

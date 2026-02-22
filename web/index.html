@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance Revenue Engine - CLI CRM for Insurance Agents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Hero Section -->
+    <div class="gradient-bg min-h-screen flex items-center justify-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-20 w-72 h-72 bg-white rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-20 right-20 w-96 h-96 bg-purple-300 rounded-full filter blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-6 py-20 relative z-10">
+            <div class="text-center">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-8">
+                    <i class="fas fa-terminal text-green-400"></i>
+                    <span class="text-sm font-medium">CLI-First CRM System</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6">
+                    Insurance Revenue<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-pink-200">Engine</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto">
+                    A complete revenue engine for independent life and health insurance agents.
+                    Track leads, activities, policies, and commissions from the command line.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#features" class="bg-white text-purple-700 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition flex items-center gap-2">
+                        <i class="fas fa-rocket"></i>
+                        Get Started
+                    </a>
+                    <a href="https://github.com/BluShooz/insurance-revenue-engine" target="_blank" class="bg-transparent border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition flex items-center gap-2">
+                        <i class="fab fa-github"></i>
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Start Command -->
+            <div class="mt-16 max-w-3xl mx-auto">
+                <div class="code-block p-6">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-4 text-gray-400 text-sm">Terminal</span>
+                    </div>
+                    <code class="text-green-400 text-sm md:text-base">
+                        <span class="text-gray-500">$</span> git clone https://github.com/BluShooz/insurance-revenue-engine.git<br>
+                        <span class="text-gray-500">$</span> cd insurance-revenue-engine<br>
+                        <span class="text-gray-500">$</span> docker-compose up -d  <span class="text-gray-600"># Start PostgreSQL</span><br>
+                        <span class="text-gray-500">$</span> npm install<br>
+                        <span class="text-gray-500">$</span> npm run db:setup<br>
+                        <span class="text-gray-500">$</span> npm run dev dashboard:overview
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-4">Powerful Features</h2>
+            <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">Everything you need to manage your insurance business in one place</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition border border-gray-700">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-users text-purple-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Lead Management</h3>
+                    <p class="text-gray-400">Track prospects from initial contact to closed sale with full lifecycle management.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition border border-gray-700">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-green-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Dynamic Lead Scoring</h3>
+                    <p class="text-gray-400">AI-inspired algorithm scores leads 0-100 based on intent, status, activities, and outcomes.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition border border-gray-700">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-clipboard-list text-blue-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Activity Logging</h3>
+                    <p class="text-gray-400">Record all interactions with 15+ activity types. Automatic status updates based on activities.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition border border-gray-700">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-file-shield text-yellow-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Policy Management</h3>
+                    <p class="text-gray-400">Full lifecycle tracking from quote to issued. Support for all product types.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition border border-gray-700">
+                    <div class="w-12 h-12 bg-emerald-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-dollar-sign text-emerald-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Commission Tracking</h3>
+                    <p class="text-gray-400">Automatic commission calculation on policy issue. Track pending and paid commissions.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-gray-800 rounded-xl p-6 hover:bg-gray-750 transition border border-gray-700">
+                    <div class="w-12 h-12 bg-pink-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-robot text-pink-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Automation Triggers</h3>
+                    <p class="text-gray-400">Built-in workflows for lead creation, activity logging, policy issuance, and more.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commands Section -->
+    <section class="py-20 bg-gray-800">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-4">CLI Commands</h2>
+            <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto">Simple, intuitive commands for every action</p>
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                <div class="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                    <h3 class="text-purple-400 font-semibold mb-3 flex items-center gap-2">
+                        <i class="fas fa-user-plus"></i> Lead Management
+                    </h3>
+                    <code class="text-sm text-gray-300">
+                        npm run dev lead:add "John" "Doe" "555-1234"<br>
+                        npm run dev lead:list<br>
+                        npm run dev lead:hot
+                    </code>
+                </div>
+
+                <div class="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                    <h3 class="text-green-400 font-semibold mb-3 flex items-center gap-2">
+                        <i class="fas fa-edit"></i> Activity Logging
+                    </h3>
+                    <code class="text-sm text-gray-300">
+                        npm run dev activity:log &lt;leadId&gt; CALL_INBOUND<br>
+                        npm run dev activity:list &lt;leadId&gt;<br>
+                        npm run dev activity:stats
+                    </code>
+                </div>
+
+                <div class="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                    <h3 class="text-blue-400 font-semibold mb-3 flex items-center gap-2">
+                        <i class="fas fa-file-contract"></i> Policy Management
+                    </h3>
+                    <code class="text-sm text-gray-300">
+                        npm run dev policy:add &lt;leadId&gt; "Carrier" TERM_LIFE<br>
+                        npm run dev policy:list<br>
+                        npm run dev policy:update-status &lt;id&gt; ISSUED
+                    </code>
+                </div>
+
+                <div class="bg-gray-900 rounded-lg p-6 border border-gray-700">
+                    <h3 class="text-yellow-400 font-semibold mb-3 flex items-center gap-2">
+                        <i class="fas fa-dollar-sign"></i> Commission Tracking
+                    </h3>
+                    <code class="text-sm text-gray-300">
+                        npm run dev commission:summary<br>
+                        npm run dev commission:view<br>
+                        npm run dev commission:pay &lt;policyId&gt;
+                    </code>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-12">Built With</h2>
+            <div class="flex flex-wrap justify-center gap-8 max-w-4xl mx-auto">
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3 mx-auto border border-gray-700">
+                        <img src="https://devicons.rustlang.io/content/icons/typescript/original.svg" alt="TypeScript" class="w-12 h-12">
+                    </div>
+                    <p class="text-sm text-gray-400">TypeScript</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3 mx-auto border border-gray-700">
+                        <img src="https://devicons.rustlang.io/content/icons/nodejs/original.svg" alt="Node.js" class="w-12 h-12">
+                    </div>
+                    <p class="text-sm text-gray-400">Node.js</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3 mx-auto border border-gray-700">
+                        <span class="text-2xl font-bold text-cyan-400">P</span>
+                    </div>
+                    <p class="text-sm text-gray-400">Prisma</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3 mx-auto border border-gray-700">
+                        <img src="https://devicons.rustlang.io/content/icons/postgresql/original.svg" alt="PostgreSQL" class="w-12 h-12">
+                    </div>
+                    <p class="text-sm text-gray-400">PostgreSQL</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-gray-800 rounded-xl flex items-center justify-center mb-3 mx-auto border border-gray-700">
+                        <i class="fas fa-terminal text-2xl text-green-400"></i>
+                    </div>
+                    <p class="text-sm text-gray-400">Commander.js</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 gradient-bg">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to Streamline Your Insurance Business?</h2>
+            <p class="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
+                Start tracking leads, policies, and commissions today. Fully functional out of the box.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="https://github.com/BluShooz/insurance-revenue-engine" target="_blank" class="bg-white text-purple-700 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition inline-flex items-center justify-center gap-2">
+                    <i class="fab fa-github"></i>
+                    View Source Code
+                </a>
+                <a href="https://github.com/BluShooz/insurance-revenue-engine/blob/main/README.md" target="_blank" class="bg-transparent border-2 border-white px-8 py-4 rounded-lg font-semibold hover:bg-white/10 transition inline-flex items-center justify-center gap-2">
+                    <i class="fas fa-book"></i>
+                    Read Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-8">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <p class="mb-2">
+                <i class="fas fa-heart text-red-500"></i> Built for independent insurance agents
+            </p>
+            <p class="text-sm">
+                MIT License &bull; MIT License &bull;
+                <a href="https://github.com/BluShooz/insurance-revenue-engine" target="_blank" class="hover:text-purple-400 transition">GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
